@@ -4,6 +4,11 @@
  */
 package com.mycompany.book.note;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 /**
  *
  * @author shori
@@ -53,6 +58,11 @@ public class notes extends javax.swing.JFrame {
 
         jButton1.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
         jButton1.setText("Save");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
         jButton2.setText("Reset");
@@ -99,6 +109,18 @@ public class notes extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        try{
+            BufferedWriter noteWriter=new BufferedWriter(new FileWriter("D:\\notes.txt",true));
+            noteWriter.append(noteTextField.getText());
+            noteWriter.close();
+        }
+        catch(IOException e){
+            System.out.println("file not found");
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

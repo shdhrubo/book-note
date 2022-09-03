@@ -280,6 +280,10 @@ private DefaultTableModel model;
             nameWriter.flush();
             authorWriter.flush();
             genreWriter.flush();
+            nameWriter.close();
+            authorWriter.close();
+            genreWriter.close();
+            bw.flush();
             bw.close();
             String rows[] = new String[3];
            rows[0]=nameValue;
@@ -309,9 +313,10 @@ private DefaultTableModel model;
                 "D:\\genre.txt"));
         String nameReaderLine = readerName.readLine();
          String authorReaderLine = readerAuthor.readLine();
-                 String genreReaderLine = readerGenre.readLine();
+           String genreReaderLine = readerGenre.readLine();
 
 		while (nameReaderLine != null) {
+                   
                       // read next line
                        name = nameReaderLine.split("/////");
                         author=authorReaderLine.split("/////");
