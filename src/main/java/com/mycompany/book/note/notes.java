@@ -112,16 +112,21 @@ public class notes extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        try{
-            BufferedWriter noteWriter=new BufferedWriter(new FileWriter("D:\\notes.txt",true));
-            noteWriter.append(noteTextField.getText());
-            noteWriter.close();
-        }
-        catch(IOException e){
-            System.out.println("file not found");
-        }
+     String savedText=noteTextField.getText();
+//        try{
+//            BufferedWriter noteWriter=new BufferedWriter(new FileWriter("D:\\notes.txt",true));
+//           
+//            noteWriter.append(noteTextField.getText());
+//            noteWriter.close();
+//        }
+//        catch(IOException e){
+//            System.out.println("file not found");
+//        }
     }//GEN-LAST:event_jButton1ActionPerformed
-
+//public String notesValue(){
+//String noteValue=noteTextField.getText();
+//return noteValue;
+//}
     /**
      * @param args the command line arguments
      */

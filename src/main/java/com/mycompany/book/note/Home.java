@@ -249,44 +249,33 @@ private DefaultTableModel model;
 
     private void addBookButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBookButtonActionPerformed
         try {
-             FileWriter nameWriter=new FileWriter("D:\\name.txt",true);
-             FileWriter authorWriter=new FileWriter("D:\\author.txt",true);
-             FileWriter genreWriter=new FileWriter("D:\\genre.txt",true);
-
-             FileReader sizeReader=new FileReader("D:\\size.txt");
+             FileWriter fileWriter=new FileWriter("books.txt",true);
+             //getting entered fields value 
+         String nameValue=nameField.getText();
+        String authorValue=authorField.getText();
+        String genreValue=genreField.getText();
+        
+                FileReader sizeReader=new FileReader("size.txt");
              BufferedReader br=new BufferedReader(sizeReader);
-       
+             
              String s;
               String size = null;
           while((s=br.readLine())!=null){
              size=s;
           }
           br.close();
-
-        String nameValue=nameField.getText();
-        String authorValue=authorField.getText();
-        String genreValue=genreField.getText();
-
-                   nameWriter.append(size+"/////"+nameValue+"\n");
-                   authorWriter.append(size+"/////"+authorValue+"\n");
-                   genreWriter.append(size+"/////"+genreValue+"\n");
-                   
-                   
-                   int sizeInInteger =Integer.parseInt(size);
+fileWriter.append(size+";"+nameValue+";"+authorValue+";"+genreValue+"\n");
+int sizeInInteger =Integer.parseInt(size);
                    sizeInInteger++;
-                   FileWriter sizeWriter=new FileWriter("D:\\size.txt");
+                   FileWriter sizeWriter=new FileWriter("size.txt");
                    BufferedWriter bw=new BufferedWriter(sizeWriter);
                    bw.write(sizeInInteger+"");
-            nameWriter.flush();
-            authorWriter.flush();
-            genreWriter.flush();
-            nameWriter.close();
-            authorWriter.close();
-            genreWriter.close();
+             fileWriter.flush();
+            fileWriter.close();
             bw.flush();
             bw.close();
             String rows[] = new String[3];
-           rows[0]=nameValue;
+             rows[0]=nameValue;
                 rows[1]=authorValue;
                 rows[2]=genreValue;
                 model.addRow(rows);
@@ -302,36 +291,22 @@ private DefaultTableModel model;
         String columns[]={"Name","Author","Genre","Notes"};
         model.setColumnIdentifiers(columns);
         table.setModel(model);
-        String name[],author[],genre[];
-        BufferedReader readerName,readerAuthor,readerGenre;
+        String data[];
+        BufferedReader reader;
     try {
-        readerName = new BufferedReader(new FileReader(
-                "D:\\name.txt"));
-          readerAuthor = new BufferedReader(new FileReader(
-                "D:\\author.txt"));
-          readerGenre = new BufferedReader(new FileReader(
-                "D:\\genre.txt"));
-        String nameReaderLine = readerName.readLine();
-         String authorReaderLine = readerAuthor.readLine();
-           String genreReaderLine = readerGenre.readLine();
-
+        reader = new BufferedReader(new FileReader(
+                "books.txt"));
+    
+        String nameReaderLine = reader.readLine();
 		while (nameReaderLine != null) {
-                   
                       // read next line
-                       name = nameReaderLine.split("/////");
-                        author=authorReaderLine.split("/////");
-                       genre=genreReaderLine.split("/////");
-
-                       String row[]={name[1],author[1],genre[1]};
-
-                      nameReaderLine = readerName.readLine();
-                       genreReaderLine = readerGenre.readLine();
-                       authorReaderLine = readerAuthor.readLine();
+                       data = nameReaderLine.split(";");
+                        String row[]={data[1],data[2],data[3]};
+                      nameReaderLine = reader.readLine();
                         model.addRow(row);
 			}
-			readerName.close();                     
-			readerAuthor.close();                       
-			readerGenre.close();
+			reader.close();                     
+
         
     } catch (FileNotFoundException ex) {
         Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
