@@ -4,6 +4,7 @@
  */
 package com.mycompany.book.note;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -31,50 +32,45 @@ public class notes extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        noteTextField = new javax.swing.JTextArea();
+        jScrollPane = new javax.swing.JScrollPane();
+        noteTextArea = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        saveButton = new javax.swing.JButton();
+        resetButton = new javax.swing.JButton();
+        cancelButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Add Note");
         setBounds(new java.awt.Rectangle(350, 90, 0, 0));
         setResizable(false);
 
-        noteTextField.setColumns(20);
-        noteTextField.setRows(5);
-        jScrollPane2.setViewportView(noteTextField);
+        noteTextArea.setColumns(20);
+        noteTextArea.setRows(5);
+        jScrollPane.setViewportView(noteTextArea);
 
         jLabel1.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         jLabel1.setText("Add Note");
 
-        jButton1.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
-        jButton1.setText("Save");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
+        saveButton.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        saveButton.setText("Save");
+
+        resetButton.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        resetButton.setText("Reset");
+        resetButton.addActionListener(e-> {
+            noteTextArea.setText("");
         });
 
-        jButton2.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
-        jButton2.setText("Reset");
-
-        jButton3.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
-        jButton3.setText("Cancel");
+        cancelButton.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        cancelButton.setText("Cancel");
+        cancelButton.addActionListener(e->{
+            setVisible(false);
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jScrollPane, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(127, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -82,11 +78,11 @@ public class notes extends javax.swing.JFrame {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(258, 258, 258))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(saveButton)
                         .addGap(72, 72, 72)
-                        .addComponent(jButton2)
+                        .addComponent(resetButton)
                         .addGap(63, 63, 63)
-                        .addComponent(jButton3)
+                        .addComponent(cancelButton)
                         .addGap(147, 147, 147))))
         );
         layout.setVerticalGroup(
@@ -97,36 +93,49 @@ public class notes extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(59, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(resetButton, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(14, 14, 14))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-     String savedText=noteTextField.getText();
-//        try{
-//            BufferedWriter noteWriter=new BufferedWriter(new FileWriter("D:\\notes.txt",true));
-//           
-//            noteWriter.append(noteTextField.getText());
-//            noteWriter.close();
-//        }
-//        catch(IOException e){
-//            System.out.println("file not found");
-//        }
-    }//GEN-LAST:event_jButton1ActionPerformed
+                                            
 //public String notesValue(){
 //String noteValue=noteTextField.getText();
 //return noteValue;
 //}
+
+    public String getNote() {
+        return noteTextArea.getText();
+    }
+
+    public void setNote(String note) {
+        noteTextArea.setText(note);
+    }
+
+    public JButton getSaveButton() {
+        return saveButton;
+    }
+
+    public JButton getCancelButton() {
+        return cancelButton;
+    }
+
+    public JButton getResetButton() {
+        return resetButton;
+    }
+
+    public JTextArea getNoteTextArea() {
+        return noteTextArea;
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -163,13 +172,12 @@ public class notes extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton saveButton;
+    private javax.swing.JButton resetButton;
+    private javax.swing.JButton cancelButton;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea noteTextField;
+    private javax.swing.JScrollPane jScrollPane;
+    private javax.swing.JTextArea noteTextArea;
+    private String note;
     // End of variables declaration//GEN-END:variables
 }

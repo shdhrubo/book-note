@@ -4,6 +4,9 @@
  */
 package com.mycompany.book.note;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -12,6 +15,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -19,16 +23,15 @@ import javax.swing.table.DefaultTableModel;
  * @author shori
  */
 public class Home extends javax.swing.JFrame {
-  
 
-private DefaultTableModel model;
+    private DefaultTableModel model;
+
 
     /**
      * Creates new form Home
      */
     public Home() {
         initComponents();
-
     }
 
     /**
@@ -146,6 +149,11 @@ private DefaultTableModel model;
         table.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         table.setRowHeight(30);
         table.setShowGrid(true);
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(table);
 
         jSeparator1.setBackground(new java.awt.Color(153, 153, 153));
@@ -194,28 +202,32 @@ private DefaultTableModel model;
     }// </editor-fold>//GEN-END:initComponents
 
     private void notesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_notesButtonActionPerformed
-       
-        notes nw=new notes();
-        nw.setVisible(true);
-        
+    notes note=new notes();
+        note.setVisible(true);
+        note.getNoteTextArea().setText(userNote);
+
+        note.getSaveButton().addActionListener(e->{
+            userNote = note.getNoteTextArea().getText();
+            note.setVisible(false);
+        });
     }//GEN-LAST:event_notesButtonActionPerformed
 
     private void nameFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_nameFieldFocusGained
-    
+
         if(nameField.getText().equals("Name")){
             nameField.setText("");
         }
     }//GEN-LAST:event_nameFieldFocusGained
 
     private void nameFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_nameFieldFocusLost
-       
-            if(nameField.getText().equals("")){
+
+        if(nameField.getText().equals("")){
             nameField.setText("Name");
         }
     }//GEN-LAST:event_nameFieldFocusLost
 
     private void authorFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_authorFieldActionPerformed
-        
+
     }//GEN-LAST:event_authorFieldActionPerformed
 
     private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
@@ -223,71 +235,80 @@ private DefaultTableModel model;
     }//GEN-LAST:event_formFocusGained
 
     private void authorFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_authorFieldFocusGained
-    if(authorField.getText().equals("Author")){
+        if(authorField.getText().equals("Author")){
             authorField.setText("");
         }
     }//GEN-LAST:event_authorFieldFocusGained
 
     private void authorFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_authorFieldFocusLost
 
-          if(authorField.getText().equals("")){
+        if(authorField.getText().equals("")){
             authorField.setText("Author");
         }
     }//GEN-LAST:event_authorFieldFocusLost
 
     private void genreFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_genreFieldFocusGained
- if(genreField.getText().equals("Genre")){
+        if(genreField.getText().equals("Genre")){
             genreField.setText("");
         }
     }//GEN-LAST:event_genreFieldFocusGained
 
     private void genreFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_genreFieldFocusLost
-   if(genreField.getText().equals("")){
+        if(genreField.getText().equals("")){
             genreField.setText("Genre");
         }
     }//GEN-LAST:event_genreFieldFocusLost
 
     private void addBookButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBookButtonActionPerformed
+        if (userNote == null || userNote.equals("")) {
+            JOptionPane.showMessageDialog(null, "Please Add Some Note!!!");
+            return;
+        }
+
         try {
-             FileWriter fileWriter=new FileWriter("books.txt",true);
-             //getting entered fields value 
-         String nameValue=nameField.getText();
-        String authorValue=authorField.getText();
-        String genreValue=genreField.getText();
-        
-                FileReader sizeReader=new FileReader("size.txt");
-             BufferedReader br=new BufferedReader(sizeReader);
-             
-             String s;
-              String size = null;
-          while((s=br.readLine())!=null){
-             size=s;
-          }
-          br.close();
-fileWriter.append(size+";"+nameValue+";"+authorValue+";"+genreValue+"\n");
-int sizeInInteger =Integer.parseInt(size);
-                   sizeInInteger++;
-                   FileWriter sizeWriter=new FileWriter("size.txt");
-                   BufferedWriter bw=new BufferedWriter(sizeWriter);
-                   bw.write(sizeInInteger+"");
-             fileWriter.flush();
+            FileWriter fileWriter=new FileWriter("books.txt",true);
+            //getting entered fields value
+            String nameValue = nameField.getText();
+            String authorValue = authorField.getText();
+            String genreValue = genreField.getText();
+
+            FileReader sizeReader=new FileReader("size.txt");
+            BufferedReader br=new BufferedReader(sizeReader);
+
+            String s;
+            String size = null;
+            while((s=br.readLine())!=null) {
+                size=s;
+            }
+            br.close();
+
+            fileWriter.append(size).append(";").append(nameValue).append(";").append(authorValue).append(";").append(genreValue).append(";").append(userNote).append("\n");
+            int sizeInInteger = Integer.parseInt(size);
+            sizeInInteger++;
+            FileWriter sizeWriter=new FileWriter("size.txt");
+            BufferedWriter bw=new BufferedWriter(sizeWriter);
+            bw.write(sizeInInteger+"");
+            fileWriter.flush();
             fileWriter.close();
             bw.flush();
             bw.close();
-            String rows[] = new String[3];
-             rows[0]=nameValue;
-                rows[1]=authorValue;
-                rows[2]=genreValue;
-                model.addRow(rows);
-       
+
+            Object[] rows = new Object[4];
+            rows[0] = nameValue;
+            rows[1] = authorValue;
+            rows[2] = genreValue;
+            rows[3] = userNote;
+            model.addRow(rows);
+
+            userNote = "";
         } catch (IOException ex) {
             Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
         }
- 
+
     }//GEN-LAST:event_addBookButtonActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        model=new DefaultTableModel();
+      model=new DefaultTableModel();
         String columns[]={"Name","Author","Genre","Notes"};
         model.setColumnIdentifiers(columns);
         table.setModel(model);
@@ -301,7 +322,7 @@ int sizeInInteger =Integer.parseInt(size);
 		while (nameReaderLine != null) {
                       // read next line
                        data = nameReaderLine.split(";");
-                        String row[]={data[1],data[2],data[3]};
+                        String row[]={data[1],data[2],data[3],data[4]};
                       nameReaderLine = reader.readLine();
                         model.addRow(row);
 			}
@@ -315,15 +336,34 @@ int sizeInInteger =Integer.parseInt(size);
     }
     }//GEN-LAST:event_formWindowOpened
 
+    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
+          // TODO add your handling code here:
+            try {
+                    BufferedReader bufferedReader = new BufferedReader(new FileReader("books.txt"));
+                    String line;
+                    while((line = bufferedReader.readLine()) != null) {
+                        String data[] = line.split(";");
+
+                        if (Integer.parseInt(data[0]) == table.getSelectedRow()) {
+                            JOptionPane.showMessageDialog(null, "Note " + data[4]);
+                        }
+                    }
+                    bufferedReader.close();
+                } catch (Exception e) {
+                 System.out.println("File Not Found");
+                }
+            
+    }//GEN-LAST:event_tableMouseClicked
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        
+
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -347,7 +387,7 @@ int sizeInInteger =Integer.parseInt(size);
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Home().setVisible(true);
-               
+
             }
         });
     }
@@ -361,7 +401,8 @@ int sizeInInteger =Integer.parseInt(size);
     private javax.swing.JButton notesButton;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
-  
+    private String userNote = "";
+
 }
 
 
