@@ -13,7 +13,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -23,11 +25,46 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author shori
  */
+
 public class Home extends javax.swing.JFrame {
 
     private DefaultTableModel model;
 
+//declaration
+         BST<String, Book> nameTree = new BST<>();
+        //adjacent list
+        BST<String, ArrayList<Book>> authorTree = new BST<>();
+        BST<String, ArrayList<Book>> genreTree = new BST<>();
+        
+        ArrayList<Book> books = new ArrayList<>();
+    public void treeBuild(){
+            nameTree = new BST<>();
+        //adjacent list
+     authorTree = new BST<>();
+       genreTree = new BST<>();
+        
+//     System.out.println(books);
+        for (Book book : books) {
+            //name
+            nameTree.insert(book.getName().toLowerCase(), book);
 
+            //author
+            if(authorTree.search(book.getAuthor().toLowerCase())!=null){
+                authorTree.search(book.getAuthor().toLowerCase()).getValue().add(book);
+            }else {
+                authorTree.insert(book.getAuthor().toLowerCase(), new ArrayList<>());
+                authorTree.search(book.getAuthor().toLowerCase()).getValue().add(book);
+            }
+
+            //genre
+            if(genreTree.search(book.getGenre().toLowerCase())!=null){
+                genreTree.search(book.getGenre().toLowerCase()).getValue().add(book);
+            }else {
+                genreTree.insert(book.getGenre().toLowerCase(), new ArrayList<>());
+                genreTree.search(book.getGenre().toLowerCase()).getValue().add(book);
+            }
+        }
+}
     /**
      * Creates new form Home
      */
@@ -58,6 +95,10 @@ public class Home extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
         searchButton = new javax.swing.JButton();
+        editButton = new javax.swing.JButton();
+        deleteButton = new javax.swing.JButton();
+        viewNoteButton = new javax.swing.JButton();
+        resetButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Book-note");
@@ -72,6 +113,12 @@ public class Home extends javax.swing.JFrame {
             }
         });
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
@@ -166,12 +213,52 @@ public class Home extends javax.swing.JFrame {
         jSeparator1.setBackground(new java.awt.Color(153, 153, 153));
         jSeparator1.setForeground(new java.awt.Color(102, 102, 102));
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel1.setText("Search Your Added Books");
 
+        searchButton.setBackground(new java.awt.Color(102, 102, 255));
+        searchButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        searchButton.setForeground(new java.awt.Color(255, 255, 255));
         searchButton.setText("Search");
         searchButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchButtonActionPerformed(evt);
+            }
+        });
+
+        editButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        editButton.setForeground(new java.awt.Color(102, 102, 255));
+        editButton.setText("Edit");
+        editButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editButtonActionPerformed(evt);
+            }
+        });
+
+        deleteButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        deleteButton.setForeground(new java.awt.Color(102, 102, 255));
+        deleteButton.setText("Delete");
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
+
+        viewNoteButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        viewNoteButton.setForeground(new java.awt.Color(102, 102, 255));
+        viewNoteButton.setText("View Note");
+        viewNoteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewNoteButtonActionPerformed(evt);
+            }
+        });
+
+        resetButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        resetButton.setForeground(new java.awt.Color(102, 102, 255));
+        resetButton.setText("Reset");
+        resetButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetButtonActionPerformed(evt);
             }
         });
 
@@ -180,40 +267,48 @@ public class Home extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator1)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(97, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 898, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(87, 87, 87))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(51, 51, 51)
+                        .addGap(239, 239, 239)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(75, 75, 75)
+                        .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(74, 74, 74)
+                        .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(50, 50, 50)
                         .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(42, 42, 42)
-                        .addComponent(authorField, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(39, 39, 39)
-                        .addComponent(genreField, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(39, 39, 39)
-                        .addComponent(notesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(authorField, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(39, 39, 39)
+                                .addComponent(genreField, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(39, 39, 39))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(viewNoteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(59, 59, 59)
+                                .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(24, 24, 24)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(notesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(resetButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(42, 42, 42)
-                        .addComponent(addBookButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(202, 202, 202)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(91, 91, 91)
-                        .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(95, 95, 95)
-                        .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(51, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jSeparator2)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 898, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(87, 87, 87))
+                        .addComponent(addBookButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jSeparator2)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(23, Short.MAX_VALUE)
+                .addContainerGap(16, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
@@ -221,30 +316,33 @@ public class Home extends javax.swing.JFrame {
                 .addGap(12, 12, 12)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 414, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(19, 19, 19)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(17, 17, 17)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(authorField, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(genreField, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(notesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(addBookButton, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28))
+                .addGap(31, 31, 31)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(editButton)
+                    .addComponent(viewNoteButton)
+                    .addComponent(deleteButton)
+                    .addComponent(resetButton))
+                .addGap(15, 15, 15))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
     private void notesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_notesButtonActionPerformed
-    notes note=new notes();
-        note.setVisible(true);
-        note.getNoteTextArea().setText(userNote);
-
-        note.getSaveButton().addActionListener(e->{
-            userNote = note.getNoteTextArea().getText();
-            note.setVisible(false);
+                note.setVisible(true);
+                note.getNoteTextArea().setText(userNote);
+                note.getSaveButton().addActionListener(e->{
+                userNote = note.getNoteTextArea().getText();
+                note.setVisible(false);
         });
     }//GEN-LAST:event_notesButtonActionPerformed
 
@@ -294,28 +392,7 @@ public class Home extends javax.swing.JFrame {
             genreField.setText("Genre");
         }
     }//GEN-LAST:event_genreFieldFocusLost
-public void treeBuild(){
-for (Book book : books) {
-
-            nameTree.insert(book.getName().toLowerCase(), book);
-
-            //author
-            if(authorTree.search(book.getAuthor().toLowerCase())!=null){
-                authorTree.search(book.getAuthor().toLowerCase()).getValue().add(book);
-            }else {
-                authorTree.insert(book.getAuthor().toLowerCase(), new ArrayList<>());
-                authorTree.search(book.getAuthor().toLowerCase()).getValue().add(book);
-            }
-
-            //genre
-            if(genreTree.search(book.getGenre().toLowerCase())!=null){
-                genreTree.search(book.getGenre().toLowerCase()).getValue().add(book);
-            }else {
-                genreTree.insert(book.getGenre().toLowerCase(), new ArrayList<>());
-                genreTree.search(book.getGenre().toLowerCase()).getValue().add(book);
-            }
-        }
-}
+   
     private void addBookButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBookButtonActionPerformed
         String nameValue = nameField.getText();
             String authorValue = authorField.getText();
@@ -326,21 +403,20 @@ for (Book book : books) {
         }
 
         try {
-             String[] rows = new String[5];
+            String[] rows = new String[5];
             rows[0] = nameValue;
             rows[1] = authorValue;
             rows[2] = genreValue;
             rows[3] = userNote;
-           Book book=new Book(rows[0], rows[1], rows[2], rows[3]);
+            Book book=new Book(rows[0], rows[1], rows[2], rows[3]);
            
-// treeBuild();
+            // treeBuild();
              if(nameTree.search(book.getName().toLowerCase())==null){
                 nameTree.insert(book.getName().toLowerCase(), book);
                  books.add(book);
                  FileWriter fileWriter=new FileWriter("books.txt",true);
             //getting entered fields value
            
-
             FileReader sizeReader=new FileReader("size.txt");
             BufferedReader br=new BufferedReader(sizeReader);
 
@@ -350,8 +426,8 @@ for (Book book : books) {
                 size=s;
             }
             br.close();
-
-            fileWriter.append(size).append(";").append(nameValue).append(";").append(authorValue).append(";").append(genreValue).append(";").append(userNote).append("\n");
+//append(size).append(";")
+//            fileWriter.append(nameValue).append(";").append(authorValue).append(";").append(genreValue).append(";").append(userNote).append("\n");
             int sizeInInteger = Integer.parseInt(size);
             sizeInInteger++;
             FileWriter sizeWriter=new FileWriter("size.txt");
@@ -361,14 +437,12 @@ for (Book book : books) {
             fileWriter.close();
             bw.flush();
             bw.close();
-
-          
-            model.addRow(rows);
-}
-else{
-    JOptionPane.showMessageDialog(null, "Same Book Already Added");
+             model.addRow(rows);
+        }
+    else{
+            JOptionPane.showMessageDialog(null, "Same Book Already Added");
             return;
-}
+        }
            
 
             //author
@@ -392,136 +466,232 @@ else{
         }
 
     }//GEN-LAST:event_addBookButtonActionPerformed
-   //declaration
-    BST<String, Book> nameTree = new BST<>();
-
-        //adjacent list
-        BST<String, ArrayList<Book>> authorTree = new BST<>();
-        BST<String, ArrayList<Book>> genreTree = new BST<>();
-
-        ArrayList<Book> books = new ArrayList<>();
+   
         
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        model=new DefaultTableModel();
-        String columns[]={"Name","Author","Genre","Notes"};
-        model.setColumnIdentifiers(columns);
-        table.setModel(model);
-//     searching
+                    model=new DefaultTableModel();
+                    String columns[]={"Name","Author","Genre","Notes"};
+                    model.setColumnIdentifiers(columns);
+                    table.setModel(model);
+            //     searching
 
-        String data[];
-        BufferedReader reader;
-    try {
-        reader = new BufferedReader(new FileReader(
-                "books.txt"));
-    
-        String nameReaderLine = reader.readLine();
-		while (nameReaderLine != null) {
-                      // read next line
-                       data = nameReaderLine.split(";");
-                        String row[]={data[1],data[2],data[3],data[4]};
-                        //adding for searching in the arraylist
-                          books.add(new Book(data[1], data[2], data[3], data[4]));
-                      nameReaderLine = reader.readLine();
-                        model.addRow(row);
-			}
-          
-			reader.close();                     
-  //build
-      
-        
-        treeBuild();
-        
-        
-        
-    } catch (FileNotFoundException ex) {
-        Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
-    } catch (IOException ex) {
-        Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
-    }
+                    String data[];
+                    BufferedReader reader;
+                try {
+                    reader = new BufferedReader(new FileReader(
+                            "books.txt"));
+
+                    String nameReaderLine = reader.readLine();
+                        while (nameReaderLine != null) {
+                          // read next line
+                          data = nameReaderLine.split(";");
+                          String row[]={data[0],data[1],data[2],data[3]};
+                           //adding for searching in the arraylist
+                           books.add(new Book(data[0], data[1], data[2], data[3]));
+                           nameReaderLine = reader.readLine();
+                           model.addRow(row);
+                        }
+                        reader.close();                     
+              //build
+                      treeBuild();
+
+
+
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+                }
     }//GEN-LAST:event_formWindowOpened
 
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
           // TODO add your handling code here:
-          if(evt.getButton()==MouseEvent.BUTTON1||evt.getButton()==MouseEvent.BUTTON2){
-                      try {
-                    BufferedReader bufferedReader = new BufferedReader(new FileReader("books.txt"));
-                    String line;
-                    while((line = bufferedReader.readLine()) != null) {
-                        String data[] = line.split(";");
+                int numberOfRow=table.getSelectedRow();
+                String name=model.getValueAt(numberOfRow, 0).toString();
+                String author=model.getValueAt(numberOfRow, 1).toString();
+                String genre=model.getValueAt(numberOfRow, 2).toString();
+                userNote=model.getValueAt(numberOfRow, 3).toString();
+                nameField.setText(name);
+                authorField.setText(author);
+                genreField.setText(genre);
+                note.getNoteTextArea().setText(userNote);
 
-                        if (Integer.parseInt(data[0]) == table.getSelectedRow()) {
-//                            JOptionPane.showMessageDialog(null, "Note " + data[4]);
-                                ViewNote viewNote=new ViewNote();
-                                viewNote.setVisible(true);
-                                viewNote.getNoteTextArea().setText(data[4]);
-                        }
-                    }
-                } catch (Exception e) {
-                 System.out.println("File Not Found");
-                }
-          }
-          else if(evt.getButton()==MouseEvent.BUTTON3){
-              System.out.println("Right Button Clicked");
-          }
             
     }//GEN-LAST:event_tableMouseClicked
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         // TODO add your handling code here:
-         String k = searchTextField.getText().toLowerCase();
-          if(!k.equals("")){
-        model.getDataVector().removeAllElements();
-    model.fireTableDataChanged();
-          
+                    String k = searchTextField.getText().toLowerCase();
+                    if(!k.equals("")){
+                        model.getDataVector().removeAllElements();
+                         model.fireTableDataChanged();
+                        System.out.println(books);
+                       if (nameTree.search(k)!=null) {
+                        Book book=nameTree.search(k).getValue();
+                        model.addRow(new String[]{book.getName(),book.getAuthor(),book.getGenre(),book.getNote()});
+                        }
 
-        if (nameTree.search(k)!=null) {
-            Book book=nameTree.search(k).getValue();
-            model.addRow(new String[]{book.getName(),book.getAuthor(),book.getGenre(),book.getNote()});
-        }
+                        if (authorTree.search(k)!=null) {
+                        ArrayList<Book> books=authorTree.search(k).getValue();
+                        for(Book book: books){
+                              model.addRow(new String[]{book.getName(),book.getAuthor(),book.getGenre(),book.getNote()});
+                        }
+                       }
 
-        if (authorTree.search(k)!=null) {
-            ArrayList<Book> books=authorTree.search(k).getValue();
-            for(Book book: books){
-                  model.addRow(new String[]{book.getName(),book.getAuthor(),book.getGenre(),book.getNote()});
-            }
-        }
-
-        if(genreTree.search(k)!=null) {
-            ArrayList<Book> books=genreTree.search(k).getValue();
-            for(Book book: books){
-                  model.addRow(new String[]{book.getName(),book.getAuthor(),book.getGenre(),book.getNote()});
-            }
-        }
-          } 
-          else{
+                        if(genreTree.search(k)!=null) {
+                        ArrayList<Book> books=genreTree.search(k).getValue();
+                        for(Book book: books){
+                              model.addRow(new String[]{book.getName(),book.getAuthor(),book.getGenre(),book.getNote()});
+                        }
+                        }
+                      } 
+                else{
                       model.getDataVector().removeAllElements();
-    model.fireTableDataChanged();
-             try {
-                 BufferedReader reader = null;
-                 try {
-                     reader = new BufferedReader(new FileReader(
-                             "books.txt"));
-                 } catch (FileNotFoundException ex) {
-                     Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
-                 }
-                 
-                 String nameReaderLine = reader.readLine();
-                 while (nameReaderLine != null) {
-                     // read next line
-                     String  data[] = nameReaderLine.split(";");
-                     String row[]={data[1],data[2],data[3],data[4]};
-                     //adding for searching in the arraylist
-                     books.add(new Book(data[1], data[2], data[3], data[4]));
-                     nameReaderLine = reader.readLine();
-                     model.addRow(row);
-                 }
-                 
-                 reader.close();
-             } catch (IOException ex) {
-                 Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
-             }
+                      model.fireTableDataChanged();
+//                        System.out.println(books);
+                        for(Book book:books){
+                        String row[]={book.getName(),book.getAuthor(),book.getGenre(),book.getNote()};
+                        model.addRow(row);
+                        }
+//             try {
+//                 BufferedReader reader = null;
+//                 try {
+//                     reader = new BufferedReader(new FileReader(
+//                             "books.txt"));
+//                 } catch (FileNotFoundException ex) {
+//                     Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+//                 }
+//                 
+//                 String nameReaderLine = reader.readLine();
+//                 while (nameReaderLine != null) {
+//                     // read next line
+//                     String  data[] = nameReaderLine.split(";");
+//                     String row[]={data[0],data[1],data[2],data[3]};
+//                     //adding for searching in the arraylist
+//                     books.add(new Book(data[0], data[1], data[2], data[3]));
+//                     nameReaderLine = reader.readLine();
+//                     model.addRow(row);
+//                 }
+//                 
+//                 reader.close();
+//             } catch (IOException ex) {
+//                 Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+//             }
+
           }
     }//GEN-LAST:event_searchButtonActionPerformed
+
+    private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
+                 int numberOfRow=table.getSelectedRow();
+        String oldName=model.getValueAt(numberOfRow, 0).toString();
+              Book book=  nameTree.search(oldName).getValue();
+              
+                    String nameValue = nameField.getText();
+            String authorValue = authorField.getText();
+            String genreValue = genreField.getText();
+            userNote=note.getNoteTextArea().getText();
+            
+            System.out.println(book.getName());
+              System.out.println(nameValue);
+            if(book.getName().equals(nameValue)){
+                book.setAuthor(authorValue);
+                book.setGenre(genreValue);
+                book.setNote(userNote);
+                    
+                
+            }
+            else if(!book.getName().equals(nameValue) && nameTree.search(nameValue.toLowerCase())==null){
+                book.setName(nameValue);
+                book.setAuthor(authorValue);
+                book.setGenre(genreValue);
+                book.setNote(userNote);
+             }
+                 else{
+            JOptionPane.showMessageDialog(null, "Same Book Already Added");
+            return;
+        }
+        treeBuild();
+          model.setValueAt(book.getName(), numberOfRow, 0);
+          
+                   model.setValueAt(book.getAuthor(), numberOfRow, 1);
+                   model.setValueAt(book.getGenre(), numberOfRow, 2);
+                   model.setValueAt(book.getNote(), numberOfRow, 3);
+          System.out.println(book);
+//            System.out.println(nameValue+" "+authorValue+" "+ genreValue+" "+userNote);
+    }//GEN-LAST:event_editButtonActionPerformed
+
+    private void viewNoteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewNoteButtonActionPerformed
+        // TODO add your handling code here:
+//        int rowNumber=table.getSelectedRow();
+//        String oldName=model.getValueAt(rowNumber, 0).toString();
+//        nameTree.search(oldName).getValue().getNote();
+         try {
+                    BufferedReader bufferedReader = new BufferedReader(new FileReader("books.txt"));
+                    String line;
+                            String oldName=model.getValueAt(table.getSelectedRow(), 0).toString();
+                            nameTree.search(oldName).getValue();
+//                    while((line = bufferedReader.readLine()) != null) {
+//                        String data[] = line.split(";");
+
+                        if (  nameTree.search(oldName).getValue().equals(oldName)) { 
+                                ViewNote viewNote=new ViewNote();
+                                viewNote.setVisible(true);
+                                viewNote.getNoteTextArea().setText(  nameTree.search(oldName).getValue().getNote());
+//                        }
+                    }
+                } catch (Exception e) {
+                 System.out.println("File Not Found");
+                }
+    }//GEN-LAST:event_viewNoteButtonActionPerformed
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        // TODO add your handling code here:
+        int numberOfRow=table.getSelectedRow();
+            if(numberOfRow>=0){
+                 String oldName=model.getValueAt(table.getSelectedRow(), 0).toString();
+//                  System.out.println(nameTree.search(oldName).getValue());
+                  books.remove(nameTree.search(oldName).getValue());
+                 
+                  treeBuild();
+                  model.removeRow(numberOfRow);
+                  nameField.setText("Name");
+                  authorField.setText("Author");
+                  genreField.setText("Genre");
+                  userNote="";
+                  
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "No row selected");
+            }
+    }//GEN-LAST:event_deleteButtonActionPerformed
+
+    private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
+        // TODO add your handling code here:nameField.setText("Name");
+                    nameField.setText("Name");
+                    authorField.setText("Author");
+                    genreField.setText("Genre");
+                    userNote="";
+                    table.clearSelection();
+    }//GEN-LAST:event_resetButtonActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        // TODO add your handling code here:
+       
+    }//GEN-LAST:event_formWindowClosed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        try {
+            FileWriter fw=new FileWriter("books.txt");
+            for(Book book:books){
+            fw.append(book.getName()+";"+book.getAuthor()+";"+book.getGenre()+";"+book.getNote()+"\n");
+            }
+            fw.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -562,6 +732,8 @@ else{
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addBookButton;
     private javax.swing.JTextField authorField;
+    private javax.swing.JButton deleteButton;
+    private javax.swing.JButton editButton;
     private javax.swing.JTextField genreField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -569,12 +741,15 @@ else{
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTextField nameField;
     private javax.swing.JButton notesButton;
+    private javax.swing.JButton resetButton;
     private javax.swing.JButton searchButton;
     private javax.swing.JTextField searchTextField;
     private javax.swing.JTable table;
+    private javax.swing.JButton viewNoteButton;
     // End of variables declaration//GEN-END:variables
     private String userNote = "";
-
+    notes note=new notes();
+ 
 }
 
 
