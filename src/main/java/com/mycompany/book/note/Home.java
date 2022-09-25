@@ -577,19 +577,15 @@ public class Home extends javax.swing.JFrame {
 //function for view note button
     private void viewNoteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewNoteButtonActionPerformed
 
-         try {
+        
                  String line;
                  String oldName=model.getValueAt(table.getSelectedRow(), 0).toString();
-                 nameTree.search(oldName).getValue();
-                 if (  nameTree.search(oldName).getValue().equals(oldName)) { 
+
                                 ViewNote viewNote=new ViewNote();
                                 viewNote.setVisible(true);
-                                viewNote.getNoteTextArea().setText(  nameTree.search(oldName).getValue().getNote());
+                                viewNote.getNoteTextArea().setText(nameTree.search(oldName).getValue().getNote());
 
-                    }
-                } catch (Exception e) {
-                 System.out.println("File Not Found");
-                }
+               
     }//GEN-LAST:event_viewNoteButtonActionPerformed
         //function for delete button
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
