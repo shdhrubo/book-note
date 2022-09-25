@@ -27,28 +27,30 @@ import javax.swing.table.DefaultTableModel;
  */
 
 public class Home extends javax.swing.JFrame {
+       //model declaration for table
+        private DefaultTableModel model;
 
-    private DefaultTableModel model;
-
-//declaration
-         BST<String, Book> nameTree = new BST<>();
-        //adjacent list
+         //declaration of name tree
+        BST<String, Book> nameTree = new BST<>();
+        //declaration of author and genre tree with ArrayList 
         BST<String, ArrayList<Book>> authorTree = new BST<>();
         BST<String, ArrayList<Book>> genreTree = new BST<>();
-        
+        //arraylist for books
         ArrayList<Book> books = new ArrayList<>();
-    public void treeBuild(){
-            nameTree = new BST<>();
-        //adjacent list
-     authorTree = new BST<>();
-       genreTree = new BST<>();
+        //function for building tree
+        public void treeBuild(){
+         //initialization of name tree
+        nameTree = new BST<>();
+        //initialization of author and genre tree with ArrayList
+        authorTree = new BST<>();
+        genreTree = new BST<>();
         
-//     System.out.println(books);
+
         for (Book book : books) {
-            //name
+            //name tree
             nameTree.insert(book.getName().toLowerCase(), book);
 
-            //author
+            //author tree
             if(authorTree.search(book.getAuthor().toLowerCase())!=null){
                 authorTree.search(book.getAuthor().toLowerCase()).getValue().add(book);
             }else {
@@ -56,7 +58,7 @@ public class Home extends javax.swing.JFrame {
                 authorTree.search(book.getAuthor().toLowerCase()).getValue().add(book);
             }
 
-            //genre
+            //genre tree
             if(genreTree.search(book.getGenre().toLowerCase())!=null){
                 genreTree.search(book.getGenre().toLowerCase()).getValue().add(book);
             }else {
@@ -228,7 +230,7 @@ public class Home extends javax.swing.JFrame {
 
         editButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         editButton.setForeground(new java.awt.Color(102, 102, 255));
-        editButton.setText("Edit");
+        editButton.setText("Edit Book");
         editButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editButtonActionPerformed(evt);
@@ -237,7 +239,7 @@ public class Home extends javax.swing.JFrame {
 
         deleteButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         deleteButton.setForeground(new java.awt.Color(102, 102, 255));
-        deleteButton.setText("Delete");
+        deleteButton.setText("Delete Book");
         deleteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteButtonActionPerformed(evt);
@@ -345,21 +347,20 @@ public class Home extends javax.swing.JFrame {
                 note.setVisible(false);
         });
     }//GEN-LAST:event_notesButtonActionPerformed
-
+    //function for name field focus gain
     private void nameFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_nameFieldFocusGained
-
-        if(nameField.getText().equals("Name")){
+         if(nameField.getText().equals("Name")){
             nameField.setText("");
         }
     }//GEN-LAST:event_nameFieldFocusGained
-
+    //function for name field focus lost
     private void nameFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_nameFieldFocusLost
 
         if(nameField.getText().equals("")){
             nameField.setText("Name");
         }
     }//GEN-LAST:event_nameFieldFocusLost
-
+    
     private void authorFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_authorFieldActionPerformed
 
     }//GEN-LAST:event_authorFieldActionPerformed
@@ -367,32 +368,32 @@ public class Home extends javax.swing.JFrame {
     private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
 
     }//GEN-LAST:event_formFocusGained
-
+    //function for author field focus gain
     private void authorFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_authorFieldFocusGained
         if(authorField.getText().equals("Author")){
             authorField.setText("");
         }
     }//GEN-LAST:event_authorFieldFocusGained
-
+    //function for name field focus lost
     private void authorFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_authorFieldFocusLost
 
         if(authorField.getText().equals("")){
             authorField.setText("Author");
         }
     }//GEN-LAST:event_authorFieldFocusLost
-
+    //function for genre field focus gain
     private void genreFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_genreFieldFocusGained
         if(genreField.getText().equals("Genre")){
             genreField.setText("");
         }
     }//GEN-LAST:event_genreFieldFocusGained
-
+    //function for name field focus lost
     private void genreFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_genreFieldFocusLost
         if(genreField.getText().equals("")){
             genreField.setText("Genre");
         }
     }//GEN-LAST:event_genreFieldFocusLost
-   
+   //function for add book button
     private void addBookButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBookButtonActionPerformed
         String nameValue = nameField.getText();
             String authorValue = authorField.getText();
@@ -410,34 +411,11 @@ public class Home extends javax.swing.JFrame {
             rows[3] = userNote;
             Book book=new Book(rows[0], rows[1], rows[2], rows[3]);
            
-            // treeBuild();
+    
              if(nameTree.search(book.getName().toLowerCase())==null){
                 nameTree.insert(book.getName().toLowerCase(), book);
                  books.add(book);
-                 FileWriter fileWriter=new FileWriter("books.txt",true);
-            //getting entered fields value
-           
-            FileReader sizeReader=new FileReader("size.txt");
-            BufferedReader br=new BufferedReader(sizeReader);
-
-            String s;
-            String size = null;
-            while((s=br.readLine())!=null) {
-                size=s;
-            }
-            br.close();
-//append(size).append(";")
-//            fileWriter.append(nameValue).append(";").append(authorValue).append(";").append(genreValue).append(";").append(userNote).append("\n");
-            int sizeInInteger = Integer.parseInt(size);
-            sizeInInteger++;
-            FileWriter sizeWriter=new FileWriter("size.txt");
-            BufferedWriter bw=new BufferedWriter(sizeWriter);
-            bw.write(sizeInInteger+"");
-            fileWriter.flush();
-            fileWriter.close();
-            bw.flush();
-            bw.close();
-             model.addRow(rows);
+                 model.addRow(rows);
         }
     else{
             JOptionPane.showMessageDialog(null, "Same Book Already Added");
@@ -460,20 +438,23 @@ public class Home extends javax.swing.JFrame {
                 genreTree.insert(book.getGenre().toLowerCase(), new ArrayList<>());
                 genreTree.search(book.getGenre().toLowerCase()).getValue().add(book);
             }
+            nameField.setText("Name");
+            authorField.setText("Author");
+            genreField.setText("Genre");
             userNote = "";
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }//GEN-LAST:event_addBookButtonActionPerformed
-   
+    
         
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
                     model=new DefaultTableModel();
                     String columns[]={"Name","Author","Genre","Notes"};
                     model.setColumnIdentifiers(columns);
                     table.setModel(model);
-            //     searching
+       
 
                     String data[];
                     BufferedReader reader;
@@ -492,7 +473,7 @@ public class Home extends javax.swing.JFrame {
                            model.addRow(row);
                         }
                         reader.close();                     
-              //build
+              //tree build
                       treeBuild();
 
 
@@ -503,7 +484,7 @@ public class Home extends javax.swing.JFrame {
                     Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
                 }
     }//GEN-LAST:event_formWindowOpened
-
+    //function for mouse click in table
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
           // TODO add your handling code here:
                 int numberOfRow=table.getSelectedRow();
@@ -518,7 +499,7 @@ public class Home extends javax.swing.JFrame {
 
             
     }//GEN-LAST:event_tableMouseClicked
-
+    //function for search button
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         // TODO add your handling code here:
                     String k = searchTextField.getText().toLowerCase();
@@ -548,39 +529,14 @@ public class Home extends javax.swing.JFrame {
                 else{
                       model.getDataVector().removeAllElements();
                       model.fireTableDataChanged();
-//                        System.out.println(books);
                         for(Book book:books){
                         String row[]={book.getName(),book.getAuthor(),book.getGenre(),book.getNote()};
                         model.addRow(row);
                         }
-//             try {
-//                 BufferedReader reader = null;
-//                 try {
-//                     reader = new BufferedReader(new FileReader(
-//                             "books.txt"));
-//                 } catch (FileNotFoundException ex) {
-//                     Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
-//                 }
-//                 
-//                 String nameReaderLine = reader.readLine();
-//                 while (nameReaderLine != null) {
-//                     // read next line
-//                     String  data[] = nameReaderLine.split(";");
-//                     String row[]={data[0],data[1],data[2],data[3]};
-//                     //adding for searching in the arraylist
-//                     books.add(new Book(data[0], data[1], data[2], data[3]));
-//                     nameReaderLine = reader.readLine();
-//                     model.addRow(row);
-//                 }
-//                 
-//                 reader.close();
-//             } catch (IOException ex) {
-//                 Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
-//             }
 
           }
     }//GEN-LAST:event_searchButtonActionPerformed
-
+    //functon for edit button
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
                  int numberOfRow=table.getSelectedRow();
         String oldName=model.getValueAt(numberOfRow, 0).toString();
@@ -616,55 +572,49 @@ public class Home extends javax.swing.JFrame {
                    model.setValueAt(book.getAuthor(), numberOfRow, 1);
                    model.setValueAt(book.getGenre(), numberOfRow, 2);
                    model.setValueAt(book.getNote(), numberOfRow, 3);
-          System.out.println(book);
-//            System.out.println(nameValue+" "+authorValue+" "+ genreValue+" "+userNote);
     }//GEN-LAST:event_editButtonActionPerformed
-
+//function for view note button
     private void viewNoteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewNoteButtonActionPerformed
-        // TODO add your handling code here:
-//        int rowNumber=table.getSelectedRow();
-//        String oldName=model.getValueAt(rowNumber, 0).toString();
-//        nameTree.search(oldName).getValue().getNote();
-         try {
-                    BufferedReader bufferedReader = new BufferedReader(new FileReader("books.txt"));
-                    String line;
-                            String oldName=model.getValueAt(table.getSelectedRow(), 0).toString();
-                            nameTree.search(oldName).getValue();
-//                    while((line = bufferedReader.readLine()) != null) {
-//                        String data[] = line.split(";");
 
-                        if (  nameTree.search(oldName).getValue().equals(oldName)) { 
+         try {
+                 String line;
+                 String oldName=model.getValueAt(table.getSelectedRow(), 0).toString();
+                 nameTree.search(oldName).getValue();
+                 if (  nameTree.search(oldName).getValue().equals(oldName)) { 
                                 ViewNote viewNote=new ViewNote();
                                 viewNote.setVisible(true);
                                 viewNote.getNoteTextArea().setText(  nameTree.search(oldName).getValue().getNote());
-//                        }
+
                     }
                 } catch (Exception e) {
                  System.out.println("File Not Found");
                 }
     }//GEN-LAST:event_viewNoteButtonActionPerformed
-
+        //function for delete button
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         // TODO add your handling code here:
         int numberOfRow=table.getSelectedRow();
             if(numberOfRow>=0){
-                 String oldName=model.getValueAt(table.getSelectedRow(), 0).toString();
-//                  System.out.println(nameTree.search(oldName).getValue());
-                  books.remove(nameTree.search(oldName).getValue());
-                 
+             String nameOfDeletingBook=model.getValueAt(table.getSelectedRow(), 0).toString();
+             int input = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the book "+"\""+nameOfDeletingBook+"\"?");
+            if(input==0){
+                  books.remove(nameTree.search(nameOfDeletingBook).getValue());
                   treeBuild();
                   model.removeRow(numberOfRow);
                   nameField.setText("Name");
                   authorField.setText("Author");
                   genreField.setText("Genre");
                   userNote="";
-                  
+            }
+            else{
+                return;
+            }
             }
             else{
                 JOptionPane.showMessageDialog(null, "No row selected");
             }
     }//GEN-LAST:event_deleteButtonActionPerformed
-
+    //function for reset button
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
         // TODO add your handling code here:nameField.setText("Name");
                     nameField.setText("Name");
@@ -675,10 +625,9 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_resetButtonActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        // TODO add your handling code here:
        
     }//GEN-LAST:event_formWindowClosed
-
+    //function for form window closing
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
         try {
@@ -751,5 +700,3 @@ public class Home extends javax.swing.JFrame {
     notes note=new notes();
  
 }
-
-

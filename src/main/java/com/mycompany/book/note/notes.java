@@ -106,12 +106,6 @@ public class notes extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-                                            
-//public String notesValue(){
-//String noteValue=noteTextField.getText();
-//return noteValue;
-//}
-
     public String getNote() {
         return noteTextArea.getText();
     }

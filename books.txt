@@ -1,5 +1,1 @@
-bangla;dhrubo;text;dddjdhah
-eng;text;text;dndndd
-math;text;text;mssms
-bangla ;text;text;mssms
-bangla  ;dhrubo;text;dddjdhah
+bangla;dhrubo;t;dddjdhah
