@@ -416,6 +416,7 @@ public class Home extends javax.swing.JFrame {
                 nameTree.insert(book.getName().toLowerCase(), book);
                  books.add(book);
                  model.addRow(rows);
+                 JOptionPane.showMessageDialog(null, "Book Added Successfully");
         }
     else{
             JOptionPane.showMessageDialog(null, "Same Book Already Added");
